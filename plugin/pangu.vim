@@ -14,7 +14,7 @@ function! PanGuSpaceCore()
         let b:curline = line(".")
 
         " 剔除多余的非行首多个连续空白。
-        silent! %s/\(\S\)\s\+/\1 /
+        silent! %s/\(\S\)\s\+/\1 /g
 
         " 汉字后的标点符号，转成全角符号。
         silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\s*/\1。/g
