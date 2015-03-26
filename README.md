@@ -29,7 +29,7 @@
 autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpace()
 ```
 
-> ** 注意：目前只对纯文本格式的文件支持较好，其他如 html 等，请谨慎开启。**
+> **注意：目前只对纯文本格式的文件支持较好，其他如 html 等，请谨慎开启。**
 >
 > 如果有合适的文件格式推荐，请提交 [Issue](https://github.com/hotoo/pangu.vim/issues)
 
