@@ -8,7 +8,7 @@ let load_pangu_space=1
 
 let g:pangu_enabled=1
 
-function! PanGuSpaceCore()
+function! PanGuSpacingCore()
     if &ft != "diff"
         let b:curcol = col(".")
         let b:curline = line(".")
@@ -116,12 +116,12 @@ function! PanGuSpaceCore()
     endif
 endfunction
 
-function! PanGuSpace()
+function! PanGuSpacing()
   if g:pangu_enabled == 1
-    call PanGuSpaceCore()
+    call PanGuSpacingCore()
   endif
 endfunction
 
-command! -nargs=0 Pangu call PanGuSpaceCore()
+command! -nargs=0 Pangu call PanGuSpacingCore()
 command! -nargs=0 PanguDisable let g:pangu_enabled=0
 command! -nargs=0 PanguEnable let g:pangu_enabled=1

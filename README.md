@@ -26,7 +26,7 @@
 同时可以在 vimrc 中开启自动规范化功能。开启方式：
 
 ```viml
-autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpace()
+autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing()
 ```
 
 > **注意：目前只对纯文本格式的文件支持较好，其他如 html 等，请谨慎开启。**
