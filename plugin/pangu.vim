@@ -6,6 +6,8 @@ if exists("load_pangu_space")
 endif
 let load_pangu_space=1
 
+let b:pangu_enabled=1
+
 function! PanGuSpaceCore()
     if &ft != "diff"
         let b:curcol = col(".")
