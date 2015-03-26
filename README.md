@@ -14,24 +14,24 @@
 
 ## 支持的文件格式
 
-默认支持以下文件格式：
+推荐在以下文件格式中使用：
 
 * Markdown (*.md, *.markdown)
 * Text (*.text, *.txt)
 * Wiki (*.wiki)
 * Vim 中文文档 (*.cnx)
 
-如果你想在其他格式的文件中使用这个功能，可以在 vimrc 中开启。
+如果想在其他格式的文件中使用这个功能，可以执行 `:Pangu` 命令。
 
-** 注意：目前只对纯文本格式的文件支持较好，其他如 html 等，请谨慎开启。**
-
-如果有合适的文件格式推荐，请提交 [Issue](https://github.com/hotoo/pangu.vim/issues)
-
-开启方式：
+同时可以在 vimrc 中开启自动规范化功能。开启方式：
 
 ```viml
-autocmd BufWritePre *.ext,*.ext2 call PanGuSpace()
+autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpace()
 ```
+
+> ** 注意：目前只对纯文本格式的文件支持较好，其他如 html 等，请谨慎开启。**
+>
+> 如果有合适的文件格式推荐，请提交 [Issue](https://github.com/hotoo/pangu.vim/issues)
 
 ## 安装
 
@@ -40,6 +40,20 @@ via Vundle:
 ```
 Bundle "hotoo/pangu.vim"
 ```
+
+## 用法
+
+### `:Pangu` 命令
+
+手动执行该命令，将当前文件进行规范化。
+
+### `:PanguDisable` 命令
+
+禁止自动规范化。
+
+### `:PanguEnable` 命令
+
+启用自动规范化。
 
 ## 参考
 

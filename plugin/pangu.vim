@@ -6,7 +6,7 @@ if exists("load_pangu_space")
 endif
 let load_pangu_space=1
 
-function! PanGuSpace()
+function! PanGuSpaceCore()
     if &ft != "diff"
         let b:curcol = col(".")
         let b:curline = line(".")
@@ -114,7 +114,16 @@ function! PanGuSpace()
     endif
 endfunction
 
+function! PanGuSpace()
+  if b:pangu_enabled == 1
+    call PanGuSpaceCore()
+  endif
+endfunction
+
 " [Markdown](http://en.wikipedia.org/wiki/Markdown)
 " [THE MARKDOWN FILE EXTENSION](http://daringfireball.net/linked/2014/01/08/markdown-extension)
 " [markdown.yaml](https://gist.github.com/schwa/8311179)
-autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpace()
+
+command! -nargs=0 Pangu call PanGuSpaceCore()
+command! -nargs=0 PanguDisable setl b:pangu_enabled=0
+command! -nargs=0 PanguEnable setl b:pangu_enabled=1
