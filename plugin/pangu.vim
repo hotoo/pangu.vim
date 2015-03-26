@@ -110,7 +110,7 @@ function! PanGuSpaceCore()
         silent! %s/\([a-zA-Z0-9!~&;=_`\]\,\.\:\?\$\%\^\*\-\+\)\/\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g " 汉字在后。
 
         " 修复 markdown 链接所使用的标点。
-        silent! %s/『\([^』]\+\)』[（(]\([^)]\+\)[）)]/[\1](\2)/g
+        silent! %s/『\([^』\]]\+\)[』\]][（(]\([^)]\+\)[）)]/[\1](\2)/g
 
         call cursor(b:curline, b:curcol)
     endif
