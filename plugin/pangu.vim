@@ -6,7 +6,7 @@ if exists("load_pangu_space")
 endif
 let load_pangu_space=1
 
-let b:pangu_enabled=1
+let g:pangu_enabled=1
 
 function! PanGuSpaceCore()
     if &ft != "diff"
@@ -117,11 +117,11 @@ function! PanGuSpaceCore()
 endfunction
 
 function! PanGuSpace()
-  if b:pangu_enabled == 1
+  if g:pangu_enabled == 1
     call PanGuSpaceCore()
   endif
 endfunction
 
 command! -nargs=0 Pangu call PanGuSpaceCore()
-command! -nargs=0 PanguDisable setl b:pangu_enabled=0
-command! -nargs=0 PanguEnable setl b:pangu_enabled=1
+command! -nargs=0 PanguDisable setl g:pangu_enabled=0
+command! -nargs=0 PanguEnable setl g:pangu_enabled=1
