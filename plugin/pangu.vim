@@ -120,10 +120,6 @@ function! PanGuSpace()
   endif
 endfunction
 
-" [Markdown](http://en.wikipedia.org/wiki/Markdown)
-" [THE MARKDOWN FILE EXTENSION](http://daringfireball.net/linked/2014/01/08/markdown-extension)
-" [markdown.yaml](https://gist.github.com/schwa/8311179)
-
 command! -nargs=0 Pangu call PanGuSpaceCore()
 command! -nargs=0 PanguDisable setl b:pangu_enabled=0
 command! -nargs=0 PanguEnable setl b:pangu_enabled=1
