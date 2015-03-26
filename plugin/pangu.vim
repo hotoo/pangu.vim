@@ -123,5 +123,5 @@ function! PanGuSpace()
 endfunction
 
 command! -nargs=0 Pangu call PanGuSpaceCore()
-command! -nargs=0 PanguDisable setl g:pangu_enabled=0
-command! -nargs=0 PanguEnable setl g:pangu_enabled=1
+command! -nargs=0 PanguDisable let g:pangu_enabled=0
+command! -nargs=0 PanguEnable let g:pangu_enabled=1
