@@ -113,6 +113,9 @@ function! PanGuSpacingCore()
         silent! %s/\s*[『\[]\([^』\]]\+\)[』\]][『\[]\([^』\]]\+\)[』\]]\s*/ [\1][\2] /g " 参考链接
         silent! %s/\s*[『\[]\([^』\]]\+\)[』\]][（(]\([^』)]\+\)[）)]\s*/ [\1](\2) /g " 内联链接
 
+        silent! %s/^ \[/[/
+        silent! %s/\s\+$//
+
         call cursor(b:curline, b:curcol)
     endif
 endfunction
