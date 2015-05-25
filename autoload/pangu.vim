@@ -1,19 +1,53 @@
+" Constants: {{{
+
+let s:PATTERNS = {
+      \   'CJK': '[\u4e00-\u9fa5\u3040-\u30FF]'
+      \ }
+let s:MAPPINGS = {
+      \   'punctuations': {
+      \     '.'   :   '。',
+      \     ','   :   '，',
+      \     ';'   :   '；',
+      \     '!'   :   '！',
+      \     ':'   :   '：',
+      \     '?'   :   '？',
+      \     '\'   :   '、'
+      \   }
+      \ }
+
+" }}} Constants
+
+
+" Main Functions: {{{
+
 function! pangu#spacing(text)
+  let t = a:text
+
   if &ft != "diff"
       let b:curcol = col(".")
       let b:curline = line(".")
 
       " 剔除多余的非行首多个连续空白。
-      silent! %s/\(\S\)\s\+/\1 /g
+      let t = substitute(t, '\S\zs\s\+', '\1', 'g')
 
       " 汉字后的标点符号，转成全角符号。
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\s*/\1。/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\),\s*/\1，/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\);\s*/\1；/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)!\s*/\1！/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g
+      let t = substitute(
+            \   t,
+            \   printf(
+            \     '%s\zs[%s]\ze\s*',
+            \     s:PATTERNS.CJK,
+            \     join(
+            \       map(keys(s:MAPPINGS.punctuations), 's:escape_pattern(v:val)'),
+            \       ''
+            \     )
+            \   ),
+            \   '\=s:replace_with_mapping("punctuations", submatch(0))',
+            \   'g'
+            \ )
+      return t
+
+      " FIXME: implement below...
+
       silent! %s/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g
       silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g
       silent! %s/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/『\1/g
@@ -109,3 +143,29 @@ function! pangu#spacing(text)
       call cursor(b:curline, b:curcol)
   endif
 endfunction
+
+" }}} Main Functions
+
+
+" Utils: {{{
+
+function! s:replace_with_mapping(type, string) "{{{
+  let mappings = get(s:MAPPINGS, a:type, {})
+
+  if has_key(mappings, a:string)
+    return get(mappings, a:string)
+  else
+    throw printf(
+          \   'pangu.vim: undefine mapping for %s (of type %s)',
+          \   a:string,
+          \   a:type
+          \ )
+  endif
+endfunction "}}}
+
+
+function! s:escape_pattern(pattern) "{{{
+  return escape(a:pattern, '.*~\[^$')
+endfunction "}}}
+
+" }}} Utils
