@@ -1,1 +1,4 @@
 .DS_Store
+.vim-flavor
+Gemfile.lock
+VimFlavor.lock
