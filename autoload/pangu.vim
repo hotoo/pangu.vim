@@ -165,7 +165,7 @@ endfunction "}}}
 
 
 function! s:escape_pattern(pattern) "{{{
-  return escape(a:pattern, '.*~\[^$')
+  return escape(a:pattern, '.*~\[]^$')
 endfunction "}}}
 
 " }}} Utils
