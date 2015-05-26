@@ -9,6 +9,34 @@ describe 'pangu#spacing'
     Expect pangu#spacing('一.二,三;四!五:六?七\八') == '一。二，三；四！五：六？七、八'
   end
 
+  it 'converts half-width qoutes around CJK char'
+    Expect pangu#spacing('一(二)三') == '一（二）三'
+    Expect pangu#spacing('四[五]六') == '四「五」六'
+    Expect pangu#spacing('七<八>九') == '七〈八〉九'
+  end
+
+  it 'removes repeated CJK punctuations'
+    Expect pangu#spacing('。。，，；；；')  == '；'
+    Expect pangu#spacing('？？！！！！')    == '！'
+    Expect pangu#spacing('《《》》》《》')  == '》'
+    " Expect pangu#spacing('。。，，；；；')  == '。，；'
+    " Expect pangu#spacing('？？！！！！')    == '？！'
+    " Expect pangu#spacing('《《》》》《》')  == '《》《》'
+  end
+
+  it 'replaces full-width digit with half-width one'
+    Expect pangu#spacing('０１２３４５６７８９') == '0123456789'
+  end
+
+  it 'replaces full-width alphabetic with half-width one'
+    Expect pangu#spacing('ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ') == 'abcdefghijklmnopqrstuvwxyz'
+    Expect pangu#spacing('ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ') == 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  end
+
+  it 'replaces full-width non-cjk punctuation with half-width one'
+    Expect pangu#spacing('＠') == '@'
+  end
+
   it 'change arbitrary input text'
     SKIP 'not finish implemtment'
     let subject = readfile('t/fixtures/bad.txt')
