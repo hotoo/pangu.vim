@@ -5,7 +5,9 @@ let s:PATTERNS = {
       \   'CJK_PUNCTUATIONS': '[。，；？！：；《》]',
       \   'FULL_WIDTH_DIGIT': '[\uff10-\uff19]',
       \   'FULL_WIDTH_ALPHA': '[\uff21-\uff3a\uff41-\uff5a]',
-      \   'FULL_WIDTH_PUNCT': '[\uff20-\uff20]'
+      \   'FULL_WIDTH_PUNCT': '[\uff20-\uff20]',
+      \   'NON_CJK_PREFIXED':   '[a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]',
+      \   'NON_CJK_SUFFIXED':   '[a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]'
       \ }
 let s:MAPPINGS = {
       \   'punctuations': {
@@ -113,13 +115,32 @@ function! pangu#spacing(text)
             \   '\=s:down_width(submatch(0))',
             \   'g'
             \ )
+
+      " 汉字与其前后的英文字符、英文标点、数字间增加空白。
+      let t = substitute(
+            \   t,
+            \   printf(
+            \     '\zs%s\ze%s',
+            \     s:PATTERNS.NON_CJK_PREFIXED,
+            \     s:PATTERNS.CJK
+            \   ),
+            \   '\0 ',
+            \   'g'
+            \ )
+      let t = substitute(
+            \   t,
+            \   printf(
+            \     '%s\zs%s\ze',
+            \     s:PATTERNS.CJK,
+            \     s:PATTERNS.NON_CJK_SUFFIXED,
+            \   ),
+            \   ' \0',
+            \   'g'
+            \ )
+
       return t
 
       " FIXME: implement below...
-
-      " 汉字与其前后的英文字符、英文标点、数字间增加空白。
-      silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]\)/\1 \2/g " 汉字在前。
-      silent! %s/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g " 汉字在后。
 
       " 修复 markdown 链接所使用的标点。
       silent! %s/\s*[『\[]\([^』\]]\+\)[』\]][『\[]\([^』\]]\+\)[』\]]\s*/ [\1][\2] /g " 参考链接

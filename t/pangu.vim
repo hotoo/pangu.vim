@@ -37,6 +37,10 @@ describe 'pangu#spacing'
     Expect pangu#spacing('＠') == '@'
   end
 
+  it 'adds space between CJK / non-CJK words'
+    Expect pangu#spacing('但是all何night')   == '但是 all 何 night'
+  end
+
   it 'change arbitrary input text'
     SKIP 'not finish implemtment'
     let subject = readfile('t/fixtures/bad.txt')
