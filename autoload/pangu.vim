@@ -34,6 +34,21 @@ let s:CHAR_DIFF = {
       \   'PUNCT': char2nr('＠', 1) - char2nr('@', 1)
       \ }
 
+let s:PATTERNS['MARKDOWN_REF_LINK_FIX'] = join([
+      \   '\v',
+      \   '\s*',
+      \   '[「\[]' . '([^」\]]+)' . '[」\]]',
+      \   '[「\[]' . '([^」\]]+)' . '[」\]]',
+      \   '\s*'
+      \ ], '')
+let s:PATTERNS['MARKDOWN_INLINE_LINK_FIX'] = join([
+      \   '\v',
+      \   '\s*',
+      \   '[「\[]' . '([^」\]]+)' . '[」\]]',
+      \   '[（\(]' . '([^」\)]+)' . '[）\)]',
+      \   '\s*'
+      \ ], '')
+
 " }}} Constants
 
 
@@ -138,13 +153,23 @@ function! pangu#spacing(text)
             \   'g'
             \ )
 
+
+      " 修复 markdown 链接所使用的标点。
+      let t = substitute(
+            \   t,
+            \   s:PATTERNS.MARKDOWN_REF_LINK_FIX,
+            \   '[\1][\2]',
+            \   'g'
+            \ )
+      let t = substitute(
+            \   t,
+            \   s:PATTERNS.MARKDOWN_INLINE_LINK_FIX,
+            \   '[\1](\2)',
+            \   'g'
+            \ )
       return t
 
       " FIXME: implement below...
-
-      " 修复 markdown 链接所使用的标点。
-      silent! %s/\s*[『\[]\([^』\]]\+\)[』\]][『\[]\([^』\]]\+\)[』\]]\s*/ [\1][\2] /g " 参考链接
-      silent! %s/\s*[『\[]\([^』\]]\+\)[』\]][（(]\([^』)]\+\)[）)]\s*/ [\1](\2) /g " 内联链接
 
       silent! %s/^ \[/[/
       silent! %s/\s\+$//
