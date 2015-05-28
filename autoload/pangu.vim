@@ -62,7 +62,7 @@ function! pangu#spacing(text)
       let b:curline = line(".")
 
       " 剔除多余的非行首多个连续空白。
-      let t = substitute(t, '\S\zs\s\+', '\1', 'g')
+      let t = substitute(t, '\S\zs\s\+', ' ', 'g')
 
       " 汉字后的标点符号，转成全角符号。
       let t = substitute(
