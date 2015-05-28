@@ -46,6 +46,17 @@ describe 'pangu#spacing'
     let subject = readfile('t/fixtures/bad.txt')
     Expect pangu#spacing(subject) == readfile('t/fixtures/good.txt')
   end
+
+  describe 'markdown files'
+    it 'preserves punctuations of inline link'
+      Expect pangu#spacing('前文[中文](http://example.com/ "標題")後文') == '前文[中文](http://example.com/ "標題")後文'
+      Expect pangu#spacing('前文[中文](/relative/path/ "標題")後文')     == '前文[中文](/relative/path/ "標題")後文'
+    end
+
+    it 'preserves punctuations of reference link'
+      Expect pangu#spacing('前文[中文][參考]後文') == '前文[中文][參考]後文'
+    end
+  end
 end
 
 describe ':Pangu'
