@@ -41,6 +41,11 @@ describe 'pangu#spacing'
     Expect pangu#spacing('但是all何night')   == '但是 all 何 night'
   end
 
+  it 'removes first and last spaces'
+    Expect pangu#spacing(' [')   == '['
+    Expect pangu#spacing('foo ') == 'foo'
+  end
+
   it 'change arbitrary input text'
     SKIP 'not finish implemtment'
     let subject = readfile('t/fixtures/bad.txt')

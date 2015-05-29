@@ -167,14 +167,23 @@ function! pangu#spacing(text)
             \   '[\1](\2)',
             \   'g'
             \ )
-      return t
 
-      " FIXME: implement below...
-
-      silent! %s/^ \[/[/
-      silent! %s/\s\+$//
+      " 移除頭尾空白
+      let t = substitute(
+            \   t,
+            \   '^ \[',
+            \   '[',
+            \   ''
+            \ )
+      let t = substitute(
+            \   t,
+            \   '\s\+$',
+            \   '',
+            \   ''
+            \ )
 
       call cursor(b:curline, b:curcol)
+      return t
   endif
 endfunction
 
