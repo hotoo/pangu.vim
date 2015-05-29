@@ -57,134 +57,128 @@ let s:PATTERNS['MARKDOWN_INLINE_LINK_FIX'] = join([
 function! pangu#spacing(text)
   let t = a:text
 
-  if &ft != "diff"
-    let b:curcol = col(".")
-    let b:curline = line(".")
+  " 剔除多余的非行首多个连续空白。
+  let t = substitute(t, '\S\zs\s\+', ' ', 'g')
 
-    " 剔除多余的非行首多个连续空白。
-    let t = substitute(t, '\S\zs\s\+', ' ', 'g')
+  " 汉字后的标点符号，转成全角符号。
+  let t = substitute(
+        \   t,
+        \   printf(
+        \     '%s\zs[%s]\ze\s*',
+        \     s:PATTERNS.CJK,
+        \     join(
+        \       map(keys(s:MAPPINGS.punctuations), 's:escape_pattern(v:val)'),
+        \       ''
+        \     )
+        \   ),
+        \   '\=s:replace_with_mapping("punctuations", submatch(0))',
+        \   'g'
+        \ )
 
-    " 汉字后的标点符号，转成全角符号。
-    let t = substitute(
-          \   t,
-          \   printf(
-          \     '%s\zs[%s]\ze\s*',
-          \     s:PATTERNS.CJK,
-          \     join(
-          \       map(keys(s:MAPPINGS.punctuations), 's:escape_pattern(v:val)'),
-          \       ''
-          \     )
-          \   ),
-          \   '\=s:replace_with_mapping("punctuations", submatch(0))',
-          \   'g'
-          \ )
+  " 中文字前的標點符號，轉為全形
+  let t = substitute(
+        \   t,
+        \   printf(
+        \     '\zs[%s]\ze%s',
+        \     join(
+        \       map(keys(s:MAPPINGS.punctuations_prefixed), 's:escape_pattern(v:val)'),
+        \       ''
+        \     ),
+        \     s:PATTERNS.CJK
+        \   ),
+        \   '\=s:replace_with_mapping("punctuations_prefixed", submatch(0))',
+        \   'g'
+        \ )
+  " TODO: 半角单双引号无法有效判断起始和结束，以正确替换成全角单双引号。
+  " 可以考虑通过标识符号提醒。
 
-    " 中文字前的標點符號，轉為全形
-    let t = substitute(
-          \   t,
-          \   printf(
-          \     '\zs[%s]\ze%s',
-          \     join(
-          \       map(keys(s:MAPPINGS.punctuations_prefixed), 's:escape_pattern(v:val)'),
-          \       ''
-          \     ),
-          \     s:PATTERNS.CJK
-          \   ),
-          \   '\=s:replace_with_mapping("punctuations_prefixed", submatch(0))',
-          \   'g'
-          \ )
-    " TODO: 半角单双引号无法有效判断起始和结束，以正确替换成全角单双引号。
-    " 可以考虑通过标识符号提醒。
+  " 重复的标点符号。
+  let t = substitute(
+        \   t,
+        \   printf(
+        \     '\(%s\)\{2,\}',
+        \     s:PATTERNS.CJK_PUNCTUATIONS
+        \   ),
+        \   '\1',
+        \   'g'
+        \ )
 
-    " 重复的标点符号。
-    let t = substitute(
-          \   t,
-          \   printf(
-          \     '\(%s\)\{2,\}',
-          \     s:PATTERNS.CJK_PUNCTUATIONS
-          \   ),
-          \   '\1',
-          \   'g'
-          \ )
+  " 全角数字。
+  let t = substitute(
+        \   t,
+        \   s:PATTERNS.FULL_WIDTH_DIGIT,
+        \   '\=s:down_width(submatch(0))',
+        \   'g'
+        \ )
 
-    " 全角数字。
-    let t = substitute(
-          \   t,
-          \   s:PATTERNS.FULL_WIDTH_DIGIT,
-          \   '\=s:down_width(submatch(0))',
-          \   'g'
-          \ )
+  " 全角英文字符。
+  let t = substitute(
+        \   t,
+        \   s:PATTERNS.FULL_WIDTH_ALPHA,
+        \   '\=s:down_width(submatch(0))',
+        \   'g'
+        \ )
 
-    " 全角英文字符。
-    let t = substitute(
-          \   t,
-          \   s:PATTERNS.FULL_WIDTH_ALPHA,
-          \   '\=s:down_width(submatch(0))',
-          \   'g'
-          \ )
+  " 全角英文标点。
+  let t = substitute(
+        \   t,
+        \   s:PATTERNS.FULL_WIDTH_PUNCT,
+        \   '\=s:down_width(submatch(0))',
+        \   'g'
+        \ )
 
-    " 全角英文标点。
-    let t = substitute(
-          \   t,
-          \   s:PATTERNS.FULL_WIDTH_PUNCT,
-          \   '\=s:down_width(submatch(0))',
-          \   'g'
-          \ )
-
-    " 汉字与其前后的英文字符、英文标点、数字间增加空白。
-    let t = substitute(
-          \   t,
-          \   printf(
-          \     '\zs%s\ze%s',
-          \     s:PATTERNS.NON_CJK_PREFIXED,
-          \     s:PATTERNS.CJK
-          \   ),
-          \   '\0 ',
-          \   'g'
-          \ )
-    let t = substitute(
-          \   t,
-          \   printf(
-          \     '%s\zs%s\ze',
-          \     s:PATTERNS.CJK,
-          \     s:PATTERNS.NON_CJK_SUFFIXED,
-          \   ),
-          \   ' \0',
-          \   'g'
-          \ )
+  " 汉字与其前后的英文字符、英文标点、数字间增加空白。
+  let t = substitute(
+        \   t,
+        \   printf(
+        \     '\zs%s\ze%s',
+        \     s:PATTERNS.NON_CJK_PREFIXED,
+        \     s:PATTERNS.CJK
+        \   ),
+        \   '\0 ',
+        \   'g'
+        \ )
+  let t = substitute(
+        \   t,
+        \   printf(
+        \     '%s\zs%s\ze',
+        \     s:PATTERNS.CJK,
+        \     s:PATTERNS.NON_CJK_SUFFIXED,
+        \   ),
+        \   ' \0',
+        \   'g'
+        \ )
 
 
-    " 修复 markdown 链接所使用的标点。
-    let t = substitute(
-          \   t,
-          \   s:PATTERNS.MARKDOWN_REF_LINK_FIX,
-          \   '[\1][\2]',
-          \   'g'
-          \ )
-    let t = substitute(
-          \   t,
-          \   s:PATTERNS.MARKDOWN_INLINE_LINK_FIX,
-          \   '[\1](\2)',
-          \   'g'
-          \ )
+  " 修复 markdown 链接所使用的标点。
+  let t = substitute(
+        \   t,
+        \   s:PATTERNS.MARKDOWN_REF_LINK_FIX,
+        \   '[\1][\2]',
+        \   'g'
+        \ )
+  let t = substitute(
+        \   t,
+        \   s:PATTERNS.MARKDOWN_INLINE_LINK_FIX,
+        \   '[\1](\2)',
+        \   'g'
+        \ )
 
-    " 移除頭尾空白
-    let t = substitute(
-          \   t,
-          \   '^ \[',
-          \   '[',
-          \   ''
-          \ )
-    let t = substitute(
-          \   t,
-          \   '\s\+$',
-          \   '',
-          \   ''
-          \ )
+  " 移除頭尾空白
+  let t = substitute(
+        \   t,
+        \   '^ \[',
+        \   '[',
+        \   ''
+        \ )
+  let t = substitute(
+        \   t,
+        \   '\s\+$',
+        \   '',
+        \   ''
+        \ )
 
-    call cursor(b:curline, b:curcol)
-    return t
-  endif
+  return t
 endfunction
 
 " }}} Main Functions
