@@ -2,7 +2,8 @@ runtime! plugin/pangu.vim
 
 describe 'pangu#spacing'
   it 'removes non-begin-of-line redundant continuous spaces'
-    Expect pangu#spacing('foo    bar') == 'foo bar'
+    Expect pangu#spacing('foo    bar')   == 'foo bar'
+    Expect pangu#spacing("  foo\n  bar") == "  foo\n  bar"
   end
 
   it 'convert half-width punctuation after CJK char'
