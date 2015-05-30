@@ -69,14 +69,15 @@ function! pangu#spacing(text)
   let t = substitute(
         \   t,
         \   printf(
-        \     '%s\zs[%s]\ze\s*',
+        \     '\v%s' . '\zs([%s])' . '(\s+%s)?',
         \     s:PATTERNS.CJK,
         \     join(
         \       map(keys(s:MAPPINGS.punctuations), 's:escape_pattern(v:val)'),
         \       ''
-        \     )
+        \     ),
+        \     s:PATTERNS.NON_CJK_PREFIXED
         \   ),
-        \   '\=s:replace_with_mapping("punctuations", submatch(0))',
+        \   '\=s:replace_with_mapping("punctuations", submatch(1))',
         \   'g'
         \ )
 
@@ -91,7 +92,7 @@ function! pangu#spacing(text)
         \     ),
         \     s:PATTERNS.CJK
         \   ),
-        \   '\=s:replace_with_mapping("punctuations_prefixed", submatch(0))',
+        \   '\=s:replace_with_mapping("punctuations_prefixed")',
         \   'g'
         \ )
   " TODO: 半角单双引号无法有效判断起始和结束，以正确替换成全角单双引号。
@@ -191,18 +192,31 @@ endfunction
 
 " Utils: {{{
 
-function! s:replace_with_mapping(type, string) "{{{
+function! s:replace_with_mapping(type, ...) "{{{
   let mappings = get(s:MAPPINGS, a:type, {})
+  let key      = a:0 ? a:1 : submatch(0)
+  let result   = ''
 
-  if has_key(mappings, a:string)
-    return get(mappings, a:string)
+  if has_key(mappings, key)
+    " type specific operations
+    if a:type == 'punctuations'
+      let result = get(mappings, key)
+      let head = submatch(2)
+      if len(head)
+        let result = result . head[1:]
+      endif
+    else
+      let result = get(mappings, key)
+    endif
   else
     throw printf(
           \   'pangu.vim: undefine mapping for %s (of type %s)',
-          \   a:string,
+          \   key,
           \   a:type
           \ )
   endif
+
+  return result
 endfunction "}}}
 
 
