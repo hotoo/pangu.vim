@@ -6,8 +6,8 @@ let s:PATTERNS = {
       \   'FULL_WIDTH_DIGIT': '[\uff10-\uff19]',
       \   'FULL_WIDTH_ALPHA': '[\uff21-\uff3a\uff41-\uff5a]',
       \   'FULL_WIDTH_PUNCT': '[\uff20-\uff20]',
-      \   'NON_CJK_PREFIXED':   '[a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]',
-      \   'NON_CJK_SUFFIXED':   '[a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]'
+      \   'NON_CJK_PREFIXED': '[a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]',
+      \   'NON_CJK_SUFFIXED': '[a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]'
       \ }
 let s:MAPPINGS = {
       \   'punctuations': {
@@ -28,7 +28,7 @@ let s:MAPPINGS = {
       \     '<'   :   '〈'
       \   }
       \ }
-let s:CHAR_DIFF = {
+let s:CHAR_NUMBER_DIFF = {
       \   'DIGIT': char2nr('０', 1) - char2nr('0', 1),
       \   'ALPHA': char2nr('Ａ', 1) - char2nr('A', 1),
       \   'PUNCT': char2nr('＠', 1) - char2nr('@', 1)
@@ -223,9 +223,9 @@ endfunction "}}}
 function! s:down_width(char) "{{{
   let diff = ''
 
-  for type in keys(s:CHAR_DIFF)
+  for type in keys(s:CHAR_NUMBER_DIFF)
     if a:char =~ s:PATTERNS['FULL_WIDTH_' . type]
-      let diff = s:CHAR_DIFF[type]
+      let diff = s:CHAR_NUMBER_DIFF[type]
       break
     endif
   endfor
