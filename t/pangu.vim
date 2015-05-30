@@ -6,8 +6,19 @@ describe 'pangu#spacing'
     Expect pangu#spacing("  foo\n  bar") == "  foo\n  bar"
   end
 
-  it 'convert half-width punctuation after CJK char'
-    Expect pangu#spacing('一.二,三;四!五:六?七\八') == '一。二，三；四！五：六？七、八'
+  describe 'convert half-width punctuations after CJK char to full-width'
+    it 'recognizes specific punctuations'
+      Expect pangu#spacing('一.二,三;四!五:六?七\八') == '一。二，三；四！五：六？七、八'
+    end
+
+    it 'removes a training space which is for non-CJK word stop'
+      Expect pangu#spacing("情谷底,我在絕. love abyss,I'm.") == "情谷底，我在絕。love abyss,I'm."
+      Expect pangu#spacing("我在絕.    love abyss,I'm.")     == "我在絕。   love abyss,I'm."
+    end
+
+    it "doesn't remove training spaces if no reason"
+      Expect pangu#spacing("我在絕.    ") == "我在絕。    "
+    end
   end
 
   it 'converts half-width qoutes around CJK char'
