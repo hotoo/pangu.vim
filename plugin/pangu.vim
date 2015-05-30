@@ -8,6 +8,17 @@ let load_pangu_space=1
 
 let g:pangu_enabled=1
 
+
+function! PanGuSpacingFunctional()
+  let text = join(
+        \   getline(1, '$'),
+        \   "\n"
+        \ )
+  let text = pangu#spacing(text)
+  call setline(1, split(text, '\n'))
+endfunction
+
+
 function! PanGuSpacingCore()
     if &ft != "diff"
         let b:curcol = col(".")
