@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - 2.1.5
+script: rake ci
+
+before_script: |
+  sudo locale-gen zh_TW.UTF-8 zh_HK.UTF-8 zh_CN.UTF-8
+  sudo update-locale LC_ALL=zh_TW.UTF-8 LANG=zh_TW.UTF-8
+
+  hg clone https://vim.googlecode.com/hg/ vim
+  cd vim/src
+  ./configure --with-features=big
+  make
+  sudo make install
+  cd -
