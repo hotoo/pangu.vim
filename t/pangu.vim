@@ -1,6 +1,42 @@
 runtime! plugin/pangu.vim
 
+describe 'setup'
+  before
+    call vspec#hint({'sid': 'pangu#sid()'})
+  end
+
+  it 'prefers single quotation marks for traditional chinese (Taiwan/Hong Kong)'
+    for region in ['TW', 'HK']
+      execute printf('language ctype zh_%s.utf8', region)
+
+      let m = Call('s:get_mappings', 'punctuations')
+      Expect get(m, ']') == '」'
+      Expect get(m, '>') == '〉'
+
+      let m = vspec#call('s:get_mappings', 'punctuations_prefixed')
+      Expect get(m, '[') == '「'
+      Expect get(m, '<') == '〈'
+    endfor
+  end
+
+  it 'prefers double quotation marks for simplified chinese (China)'
+    language ctype zh_CN.utf8
+
+    let m = Call('s:get_mappings', 'punctuations')
+    Expect get(m, ']') == '』'
+    Expect get(m, '>') == '》'
+
+    let m = vspec#call('s:get_mappings', 'punctuations_prefixed')
+    Expect get(m, '[') == '『'
+    Expect get(m, '<') == '《'
+  end
+end
+
 describe 'pangu#spacing'
+  before
+    language ctype zh_TW.utf8
+  end
+
   it 'removes non-begin-of-line redundant continuous spaces'
     Expect pangu#spacing('foo    bar')   == 'foo bar'
     Expect pangu#spacing("  foo\n  bar") == "  foo\n  bar"
@@ -82,6 +118,10 @@ describe 'pangu#spacing'
 end
 
 describe ':Pangu'
+  before
+    language ctype zh_TW.utf8
+  end
+
   it 'change whole file content'
     edit t/fixtures/bad.txt
     Pangu

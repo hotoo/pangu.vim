@@ -9,6 +9,7 @@ let s:PATTERNS = {
       \   'NON_CJK_PREFIXED': '[a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]',
       \   'NON_CJK_SUFFIXED': '[a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]'
       \ }
+
 let s:MAPPINGS = {
       \   'punctuations': {
       \     '.'   :   '。',
@@ -28,6 +29,7 @@ let s:MAPPINGS = {
       \     '<'   :   '〈'
       \   }
       \ }
+
 let s:CHAR_NUMBER_DIFF = {
       \   'DIGIT': char2nr('０', 1) - char2nr('0', 1),
       \   'ALPHA': char2nr('Ａ', 1) - char2nr('A', 1),
@@ -48,6 +50,20 @@ let s:PATTERNS['MARKDOWN_INLINE_LINK_FIX'] = join([
       \   '[（\(]' . '([^」\)]+)' . '[）\)]',
       \   '\s*'
       \ ], '')
+
+let s:LANG_OVERRIDES = {}
+let s:LANG_OVERRIDES['mappings'] = {
+      \   'CN': {
+      \     'punctuations': {
+      \       ']'   :   '』',
+      \       '>'   :   '》'
+      \     },
+      \     'punctuations_prefixed': {
+      \       '['   :   '『',
+      \       '<'   :   '《'
+      \     }
+      \   }
+      \ }
 
 " }}} Constants
 
@@ -72,7 +88,7 @@ function! pangu#spacing(text)
         \     '\v%s' . '\zs([%s])' . '(\s+%s)?',
         \     s:PATTERNS.CJK,
         \     join(
-        \       map(keys(s:MAPPINGS.punctuations), 's:escape_pattern(v:val)'),
+        \       map(keys(s:get_mappings('punctuations')), 's:escape_pattern(v:val)'),
         \       ''
         \     ),
         \     s:PATTERNS.NON_CJK_PREFIXED
@@ -87,7 +103,7 @@ function! pangu#spacing(text)
         \   printf(
         \     '\zs[%s]\ze%s',
         \     join(
-        \       map(keys(s:MAPPINGS.punctuations_prefixed), 's:escape_pattern(v:val)'),
+        \       map(keys(s:get_mappings('punctuations_prefixed')), 's:escape_pattern(v:val)'),
         \       ''
         \     ),
         \     s:PATTERNS.CJK
@@ -193,7 +209,7 @@ endfunction
 " Utils: {{{
 
 function! s:replace_with_mapping(type, ...) "{{{
-  let mappings = get(s:MAPPINGS, a:type, {})
+  let mappings = s:get_mappings(a:type)
   let key      = a:0 ? a:1 : submatch(0)
   let result   = ''
 
@@ -244,8 +260,37 @@ function! s:down_width(char) "{{{
 endfunction "}}}
 
 
+function! s:get_mappings(type) "{{{
+  let mappings = get(s:MAPPINGS, a:type, {})
+  let region   = matchstr(v:ctype, '\c\vzh.\zs(TW|HK|CN)\ze')
+
+  if len(region)
+    let overrides = get(
+          \   get(s:LANG_OVERRIDES.mappings, region, {}),
+          \   a:type,
+          \   {}
+          \ )
+    if !empty(overrides)
+      let mappings = extend(copy(mappings), overrides)
+    endif
+  endif
+
+  return mappings
+endfunction "}}}
+
+
 function! s:escape_pattern(pattern) "{{{
   return escape(a:pattern, '.*~\[]^$')
+endfunction "}}}
+
+
+function! s:SID() "{{{
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID$')
+endfunction "}}}
+
+
+function! pangu#sid() "{{{
+  return s:SID()
 endfunction "}}}
 
 " }}} Utils
