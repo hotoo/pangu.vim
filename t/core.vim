@@ -3,11 +3,6 @@ describe 'pangu#spacing'
     language ctype zh_TW.utf8
   end
 
-  it '移除非行首的連續空白'
-    Expect pangu#spacing('foo    bar')   == 'foo bar'
-    Expect pangu#spacing("  foo\n  bar") == "  foo\n  bar"
-  end
-
   describe '中文字後面的半形標點符號，轉為全形'
     it '認識各種不同符號'
       Expect pangu#spacing('一.二,三;四!五:六?七\八') == '一。二，三；四！五：六？七、八'
@@ -18,12 +13,11 @@ describe 'pangu#spacing'
     end
 
     it '只移除一個尾隨空白'
-      SKIP 'fail due to repeated spaces removed'
       Expect pangu#spacing("我在絕.    love abyss,I'm.")     == "我在絕。   love abyss,I'm."
     end
 
     it '若沒有英文分隔符號，不要移除任何尾隨空白'
-      SKIP 'fail due to repeated spaces removed'
+      SKIP 'fail due to trailing spaces removed rule'
       Expect pangu#spacing("我在絕.    ") == "我在絕。    "
     end
   end

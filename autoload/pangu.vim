@@ -73,14 +73,6 @@ let s:LANG_OVERRIDES['mappings'] = {
 function! pangu#spacing(text)
   let t = a:text
 
-  " 剔除多余的非行首多个连续空白。
-  let t = substitute(
-        \   t,
-        \   '\S' . '\(\n\)\@<!' . '\zs\s\{2,\}',
-        \   ' ',
-        \   'g'
-        \ )
-
   " 汉字后的标点符号，转成全角符号。
   let t = substitute(
         \   t,
