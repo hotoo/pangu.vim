@@ -7,6 +7,11 @@ describe 'setup'
 
   it 'prefers single quotation marks for traditional chinese (Taiwan/Hong Kong)'
     for region in ['TW', 'HK']
+      if empty(system(printf('locale -a | grep zh.%s.utf8', region)))
+        echo printf("Test skipped: system missing support for 'zh-%s.utf8' locale.", region)
+        continue
+      endif
+
       execute printf('language ctype zh_%s.utf8', region)
 
       let m = Call('s:get_mappings', 'punctuations')
@@ -20,6 +25,10 @@ describe 'setup'
   end
 
   it 'prefers double quotation marks for simplified chinese (China)'
+    if empty(system(printf('locale -a | grep zh.%s.utf8', 'CN')))
+      SKIP "system missing support for 'zh-CN.utf8' locale."
+    endif
+
     language ctype zh_CN.utf8
 
     let m = Call('s:get_mappings', 'punctuations')
