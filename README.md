@@ -1,6 +1,11 @@
 
 # PanGu.vim
 
+[![Build Status][travis-image]][travis-url]
+
+[travis-image]: https://secure.travis-ci.org/hotoo/pangu.vim.png?branch=master
+[travis-url]: https://travis-ci.org/hotoo/pangu.vim
+
 盘古插件用于自动格式化、标准化中文排版。
 
 它会将一些非标准，或不推荐的排版方式，在保存文件时进行自动格式化、标准化。
