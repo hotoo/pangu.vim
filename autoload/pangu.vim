@@ -5,7 +5,7 @@ let s:PATTERNS = {
       \   'CJK_PUNCTUATIONS': '[。，；？！：；《》]',
       \   'FULL_WIDTH_DIGIT': '[\uff10-\uff19]',
       \   'FULL_WIDTH_ALPHA': '[\uff21-\uff3a\uff41-\uff5a]',
-      \   'FULL_WIDTH_PUNCT': '[\uff20-\uff20]',
+      \   'FULL_WIDTH_PUNCT': '[\uff20]',
       \   'NON_CJK_PREFIXED': '[a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]',
       \   'NON_CJK_SUFFIXED': '[a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]'
       \ }
