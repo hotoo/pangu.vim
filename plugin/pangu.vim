@@ -31,7 +31,7 @@ function! PanGuSpacingCore()
         " 可以考虑通过标识符号提醒。
 
         " 重复的标点符号。
-        silent! %s/\([。，；？！：；《》]\)\{2,\}/\1/g
+        silent! %s/\([。，；？！：；《》]\)\1\+/\1/g
 
         " 全角数字。
         silent! %s/０/0/g
