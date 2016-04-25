@@ -14,7 +14,7 @@ function! PanGuSpacingCore()
         let b:curline = line(".")
 
         " 汉字后的标点符号，转成全角符号。
-        silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\s*/\1。/g
+        silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\($\|\s\+\)/\1。/g
         silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\),\s*/\1，/g
         silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\);\s*/\1；/g
         silent! %s/\([\u4e00-\u9fa5\u3040-\u30FF]\)!\s*/\1！/g
