@@ -33,7 +33,7 @@ function! PanGuSpacingCore()
         " #11: 根据《标点符号用法》，重复的感叹号、问号不允许超过 3 个。
         " [标点符号用法 GB/T 15834 2011](http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf)
         silent! %s/\([！？]\)\{4,}/\1\1\1/g
-        silent! %s/\([。，；：；《》]\)\{2,}/\1/g
+        silent! %s/\([。，；：、“”『』〖〗·・《》]\)\{2,}/\1/g
 
         " 全角数字。
         silent! %s/０/0/g
