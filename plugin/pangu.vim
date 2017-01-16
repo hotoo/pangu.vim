@@ -133,6 +133,6 @@ function! PanGuSpacing()
   endif
 endfunction
 
-command! -nargs=0 Pangu call PanGuSpacingCore()
+command! -nargs=* Pangu call PanGuSpacingCore()
 command! -nargs=0 PanguDisable let g:pangu_enabled=0
 command! -nargs=0 PanguEnable let g:pangu_enabled=1
