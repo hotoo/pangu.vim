@@ -57,6 +57,17 @@ Bundle "hotoo/pangu.vim"
 
 启用自动规范化。
 
+## 技巧
+
+批量规范化多个文档。
+
+```
+$ vim a.md b.md c.md
+
+:argdo Pangu | update
+:wq
+```
+
 ## 参考
 
 * [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines)
