@@ -9,6 +9,11 @@ let load_pangu_space=1
 let g:pangu_enabled=1
 
 function! PanGuSpacingCore()
+    let ignore = search("PANGU_DISABLE", 'n')
+    if (ignore > 0)
+      return
+    endif
+
     if &ft != "diff"
         let b:curcol = col(".")
         let b:curline = line(".")
