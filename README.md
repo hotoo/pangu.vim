@@ -68,6 +68,10 @@ $ vim a.md b.md c.md
 :wq
 ```
 
+### 持久化禁用
+
+在编辑的文档中任何位置注明 `PANGU_DISABLE` 即可。
+
 ## 参考
 
 * [中文文案排版指北](https://github.com/sparanoid/chinese-copywriting-guidelines)
