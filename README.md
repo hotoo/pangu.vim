@@ -70,7 +70,7 @@ $ vim a.md b.md c.md
 
 ### 持久化禁用
 
-在编辑的文档中任何位置注明 `PANGU_DISABLE` 即可。
+在编辑的文档中任何位置注明 `PANGU_DISABLE`，则整个文档不自动规范化。
 
 ## 参考
 
