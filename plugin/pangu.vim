@@ -15,6 +15,9 @@ function! PanGuSpacingCore()
     endif
 
     if &ft != "diff"
+        let l:save_regexpengine = &regexpengine
+        let &regexpengine=2
+
         let b:curcol = col(".")
         let b:curline = line(".")
 
@@ -131,6 +134,7 @@ function! PanGuSpacingCore()
         silent! %s/\s\+$//
 
         call cursor(b:curline, b:curcol)
+        let &regexpengine=l:save_regexpengine
     endif
 endfunction
 
