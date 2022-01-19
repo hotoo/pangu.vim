@@ -6,8 +6,24 @@ if exists("load_pangu_space")
 endif
 let load_pangu_space=1
 
-if !exists("gpangu_enabled")
+if !exists("g:pangu_enabled")
   let g:pangu_enabled=1
+endif
+
+if !exists("g:pangu_rule_fullwidth_punctuation")
+  let g:pangu_rule_fullwidth_punctuation=1
+endif
+if !exists("g:pangu_rule_duplicate_punctuation")
+  let g:pangu_rule_duplicate_punctuation=1
+endif
+if !exists("g:pangu_rule_fullwidth_alphabet")
+  let g:pangu_rule_fullwidth_alphabet=1
+endif
+if !exists("g:pangu_rule_spacing")
+  let g:pangu_rule_spacing=1
+endif
+if !exists("g:pangu_rule_trailing_whitespace")
+  let g:pangu_rule_trailing_whitespace=1
 endif
 
 function! PanGuSpacingCore(mode) range
@@ -36,57 +52,68 @@ function! PanGuSpacingCore(mode) range
   endif
 
   " 汉字后的标点符号，转成全角符号。
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\($\|\s\+\)/\1。/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\),\s*/\1，/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\);\s*/\1；/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)!\s*/\1！/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g'
-  silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g'
-  silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/『\1/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\]/\1』/g'
-  silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF]\)/《\1/g'
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)>/\1》/g'
+  if g:pangu_rule_fullwidth_punctuation == 1
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\.\($\|\s\+\)/\1。/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\),\s*/\1，/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\);\s*/\1；/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)!\s*/\1！/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g'
+    silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g'
+    silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/『\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\]/\1』/g'
+    silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF]\)/《\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)>/\1》/g'
+
+    " 修复 markdown 链接所使用的标点。
+    " 参考链接
+    silent! execute firstline . ',' . lastline . 's/[『[]\([^』\]]\+\)[』\]][『[]\([^』\]]\+\)[』\]]/[\1][\2]/g'
+    " 内联链接
+    silent! execute firstline . ',' . lastline . 's/[『[]\([^』\]]\+\)[』\]][（(]\([^』)]\+\)[）)]/[\1](\2)/g'
+    " WiKi 链接：
+    " - [『中文条目』] -> [[中文条目]]
+    " - [[en 条目』] -> [[en 条目]]
+    " - [『条目 en]] -> [[条目 en]]
+    silent! execute firstline . ',' . lastline . 's/\[[『[]\([^』\]]\+\)[』\]]\]/[[\1]]/g'
+  endif
 
   " TODO: 半角单双引号无法有效判断起始和结束，以正确替换成全角单双引号。
   " 可以考虑通过标识符号提醒。
 
-  " 连续的句号转成省略号
-  " - `……`
-  " - `⋯⋯`
-  " - `......`
-  " - `······`
-  " @see [中文省略号应该垂直居中还是沉底？](https://www.zhihu.com/question/19593470)
-  silent! execute firstline . ',' . lastline . 's/。\{3,}/....../g'
+  " 连续重复的标点符号规则
+  if g:pangu_rule_duplicate_punctuation == 1
+    " 连续的句号转成省略号
+    " - `……`
+    " - `⋯⋯`
+    " - `......`
+    " - `······`
+    " @see [中文省略号应该垂直居中还是沉底？](https://www.zhihu.com/question/19593470)
+    silent! execute firstline . ',' . lastline . 's/。\{3,}/....../g'
 
-  " #11: 根据《标点符号用法》，重复的感叹号、问号不允许超过 3 个。
-  " [标点符号用法 GB/T 15834 2011](http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf)
-  silent! execute firstline . ',' . lastline . 's/\([！？]\)\1\{3,}/\1\1\1/g'
-  silent! execute firstline . ',' . lastline . 's/\([。，；：、“”『』〖〗《》]\)\1\{1,}/\1/g'
+    " #11: 根据《标点符号用法》，重复的感叹号、问号不允许超过 3 个。
+    " [标点符号用法 GB/T 15834 2011](http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf)
+    silent! execute firstline . ',' . lastline . 's/\([！？]\)\1\{3,}/\1\1\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([。，；：、“”『』〖〗《》]\)\1\{1,}/\1/g'
+  endif
 
   " 全角数字、英文字符、英文标点。
-  " 65248 是相对应的全角和半角的 Unicode 偏差。
-  silent! execute firstline . ',' . lastline . 's/\([０-９Ａ-Ｚａ-ｚ＠]\)/\=nr2char(char2nr(submatch(0))-65248)/g'
+  if g:pangu_rule_fullwidth_alphabet == 1
+    " 65248 是相对应的全角和半角的 Unicode 偏差。
+    silent! execute firstline . ',' . lastline . 's/\([０-９Ａ-Ｚａ-ｚ＠]\)/\=nr2char(char2nr(submatch(0))-65248)/g'
+  endif
 
   " 汉字与其前后的英文字符、英文标点、数字间增加空白。
-  silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]\)/\1 \2/g'
-  silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+  if g:pangu_rule_spacing == 1
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\/\\]\)/\1 \2/g'
+    silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\/\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+  endif
 
-  " 修复 markdown 链接所使用的标点。
-  " 参考链接
-  silent! execute firstline . ',' . lastline . 's/[『[]\([^』\]]\+\)[』\]][『[]\([^』\]]\+\)[』\]]/[\1][\2]/g'
-  " 内联链接
-  silent! execute firstline . ',' . lastline . 's/[『[]\([^』\]]\+\)[』\]][（(]\([^』)]\+\)[）)]/[\1](\2)/g'
-  " WiKi 链接：
-  " - [『中文条目』] -> [[中文条目]]
-  " - [[en 条目』] -> [[en 条目]]
-  " - [『条目 en]] -> [[条目 en]]
-  silent! execute firstline . ',' . lastline . 's/\[[『[]\([^』\]]\+\)[』\]]\]/[[\1]]/g'
-
-  silent! execute firstline . ',' . lastline . 's/^ \[/[/'
-  silent! execute firstline . ',' . lastline . 's/\s\+$//'
+  if g:pangu_rule_trailing_whitespace == 1
+    silent! execute firstline . ',' . lastline . 's/^ \[/[/'
+    silent! execute firstline . ',' . lastline . 's/\s\+$//'
+  endif
 
   let &regexpengine=l:save_regexpengine
   call setpos(".", savedpos)
