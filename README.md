@@ -36,6 +36,12 @@ autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing(
 
 ## 安装
 
+via vim-plug
+
+```viml
+Plug "hotoo/pangu.vim"
+```
+
 via Vundle:
 
 ```
