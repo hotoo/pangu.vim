@@ -1,0 +1,75 @@
+*pangu.txt*
+
+                      盘古之白，中文排版规范化。
+                             by @hotoo
+                  https://github.com/hotoo/pangu.vim
+
+
+1. 用法                                       |pangu-usage|
+2. 配置                                       |pangu-config|
+3. 规则                                       |pangu-rules|
+
+==============================================================================
+USAGE                                                         *pangu-usage*
+
+关闭 Pangu 插件。 >
+                                                            *:PanguDisable*
+>
+  :PanguDisable
+<
+                                                             *:PanguEnable*
+打开 Pangu 插件。 >
+  :PanguDisable
+<
+
+==============================================================================
+CONFIGURATION                                                *pangu-config*
+
+                                                            *pangu_enabled*
+启用盘古之白规范化。，默认开启，如需关闭可以设置： >
+  let g:pangu_enabled = 0
+<
+
+==============================================================================
+CONFIGURATION                                                *pangu-config*
+
+                                       *g:pangu_rule_fullwidth_punctuation*
+
+全角标点符号规则。默认开启，
+自动将 `() [] <>` 替换为 `（）「」＜＞.`
+将字母 `ＡＢＣ` 替换为 `ABC`.
+将字符 `＠` 替换为 `@`.
+
+如需关闭可以设置： >
+  let g:pangu_rule_fullwidth_punctuation = 0
+<
+
+                                       *g:pangu_rule_duplicate_punctuation*
+
+连续重复的标点符号规则。根据中华人民共和国国家标准：标点符号用法 GB/T 15834-2011
+http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
+规范，感叹号、句号最多可以连续重复 3 个，其他标点符号都不允许连续重复出现。 >
+  let g:pangu_rule_duplicate_punctuation = 0
+<
+
+                                          *g:pangu_rule_fullwidth_alphabet*
+
+全角英文字符处理规则，默认按标准规范化。如需关闭可以设置： >
+  let g:pangu_rule_fullwidth_alphabet = 0
+<
+
+                                                     *g:pangu_rule_spacing*
+
+汉字和英文字符间增加一个空白，提升美感、可读性。默认开启，需要关闭可以设置： >
+  let g:pangu_rule_spacing = 0
+<
+
+                                         *g:pangu_rule_trailing_whitespace*
+
+删除前置空白和尾空白。默认开启，如需关闭可以设置： >
+  let g:pangu_rule_trailing_whitespace = 0
+<
+
+==============================================================================
+PANGU_DISABLE
+vim:tw=78:fo=tcroq2mM:et:sts=2:sw=2:ft=help:norl:
