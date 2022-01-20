@@ -25,6 +25,9 @@ endif
 if !exists("g:pangu_rule_trailing_whitespace")
   let g:pangu_rule_trailing_whitespace=1
 endif
+if !exists("g:pangu_rule_date")
+  let g:pangu_rule_date = 2
+endif
 
 function! PanGuSpacingCore(mode) range
   let ignore = search("PANGU_DISABLE", 'n')
@@ -108,6 +111,12 @@ function! PanGuSpacingCore(mode) range
   if g:pangu_rule_spacing == 1
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\\]\)/\1 \2/g'
     silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+
+    if g:pangu_rule_date == 0
+      silent! execute firstline . ',' . lastline . 's/\s*\(\d\{4,5}\)\s\+年\s\+\(\d\{1,2}\)\s\+月\s\+\(\d\{1,2}\)\s\+日/\1年\2月\3日/g'
+    elseif g:pangu_rule_date == 1
+      silent! execute firstline . ',' . lastline . 's/\(\d\{4,5}\)\s\+年\s\+\(\d\{1,2}\)\s\+月\s\+\(\d\{1,2}\)\s\+日/\1年\2月\3日 /g'
+    endif
   endif
 
   if g:pangu_rule_trailing_whitespace == 1
