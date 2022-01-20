@@ -111,12 +111,32 @@ function! PanGuSpacingCore(mode) range
   if g:pangu_rule_spacing == 1
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\\]\)/\1 \2/g'
     silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+  endif
 
-    if g:pangu_rule_date == 0
-      silent! execute firstline . ',' . lastline . 's/\s*\(\d\{4,5}\)\s\+年\s\+\(\d\{1,2}\)\s\+月\s\+\(\d\{1,2}\)\s\+日/\1年\2月\3日/g'
-    elseif g:pangu_rule_date == 1
-      silent! execute firstline . ',' . lastline . 's/\(\d\{4,5}\)\s\+年\s\+\(\d\{1,2}\)\s\+月\s\+\(\d\{1,2}\)\s\+日/\1年\2月\3日 /g'
-    endif
+  " 默认日期每个数字都留白，向前兼容。
+  " 例：
+  " 在 2017 年 8 月 7 日生日。
+  " 在2017年8月7日。
+  if g:pangu_rule_date == 0
+    " 日期两端也不留白
+    " 例：
+    " 我在2017年8月7日生日。
+    " 在2017年8月7日。
+    silent! execute firstline . ',' . lastline . 's/\s*\(\d\{4,5}\)\s*年\s*\(\d\{1,2}\)\s*月/\1年\2月/g'
+    silent! execute firstline . ',' . lastline . 's/\s*\(\d\{1,2}\)\s*月\s*\(\d\{1,2}\)\s*日/\1月\2日/g'
+    silent! execute firstline . ',' . lastline . 's/\s*\(\d\{4,5}\)\s*年\s*\(\d\{1,2}\)\s*月\s*\(\d\{1,2}\)\s*日/\1年\2月\3日/g'
+    " 去除两端留白
+    silent! execute firstline . ',' . lastline . 's/\(\(\d\{4,5}年\)\?\d\{1,2}月\(\d\{1,2}日\)\?\)\s\+\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1\4/g'
+  elseif g:pangu_rule_date == 1
+    " 日期两端留白
+    " 例：
+    " 我在 2019年12月1日 生日。
+    " 在 2017年8月7日。
+    silent! execute firstline . ',' . lastline . 's/\(\d\{4,5}\)\s*年\s*\(\d\{1,2}\)\s*月/\1年\2月/g'
+    silent! execute firstline . ',' . lastline . 's/\(\d\{1,2}\)\s*月\s*\(\d\{1,2}\)\s\+日/\1月\2日/g'
+    silent! execute firstline . ',' . lastline . 's/\(\d\{4,5}\)\s*年\s*\(\d\{1,2}\)\s*月\s*\(\d\{1,2}\)\s\+日/\1年\2月\3日/g'
+    " 两端留白
+    silent! execute firstline . ',' . lastline . 's/\(\(\d\{4,5}年\)\?\d\{1,2}月\(\d\{1,2}日\)\?\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \4/g'
   endif
 
   if g:pangu_rule_trailing_whitespace == 1
