@@ -24,6 +24,8 @@
 测[测[中test]]，测
 测[[中test]测]，测
 
+wiki 链接 [http://www.example.com/ 示例]
+
 
 
 无嵌套书名号：

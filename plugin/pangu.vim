@@ -94,6 +94,8 @@ function! PanGuSpacingCore(mode) range
     " - [[en 条目』] -> [[en 条目]]
     " - [『条目 en]] -> [[条目 en]]
     silent! execute firstline . ',' . lastline . 's/\[[『[]\([^』\]]\+\)[』\]]\]/[[\1]]/g'
+    " 修复 wiki 链接 [http://www.example.com/ 示例]
+    silent! execute firstline . ',' . lastline . 's/[『[]\(https\?:\/\/\S\+\s\+[^』\]]\+\)[』\]]/[\1]/g'
   endif
 
   " TODO: 半角单双引号无法有效判断起始和结束，以正确替换成全角单双引号。
