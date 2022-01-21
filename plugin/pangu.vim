@@ -43,6 +43,8 @@ function! PanGuSpacingCore(mode) range
 
   let l:save_regexpengine = &regexpengine
   let &regexpengine=2
+  let l:save_gdefault = &gdefault
+  setlocal nogdefault
 
   let firstline = a:firstline
   let lastline = a:lastline
@@ -161,6 +163,9 @@ function! PanGuSpacingCore(mode) range
   endif
 
   let &regexpengine=l:save_regexpengine
+  if l:save_gdefault == 1
+    setlocal gdefault
+  endif
   call setpos(".", savedpos)
 endfunction
 
