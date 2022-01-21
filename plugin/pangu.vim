@@ -63,12 +63,21 @@ function! PanGuSpacingCore(mode) range
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g'
+    " 处理一对括号，但不支持有嵌套的括号。
+    silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF][^()]*\|[^()]*[\u4e00-\u9fa5\u3040-\u30FF]\))/（\1）/g'
     silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g'
+    " 处理一对括号，但不支持有嵌套的括号。
+    silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF][^[\]]*\|[^[\]]*[\u4e00-\u9fa5\u3040-\u30FF]\)\]/『\1』/g'
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/『\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\]/\1』/g'
+    " 处理一对括号，但不支持有嵌套的括号。
+    silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF][^<>]*\|[^<>]*[\u4e00-\u9fa5\u3040-\u30FF]\)>/《\1》/g'
     silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF]\)/《\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)>/\1》/g'
+    " 双半角书名号 `<<名称>>` 特殊处理
+    silent! execute firstline . ',' . lastline . 's/<《/《/g'
+    silent! execute firstline . ',' . lastline . 's/》>/》/g'
 
     " 修复 markdown 链接所使用的标点。
     " 参考链接
