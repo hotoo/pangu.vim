@@ -5,21 +5,50 @@
                   https://github.com/hotoo/pangu.vim
 
 
-1. 用法                                       |pangu-usage|
-2. 配置                                       |pangu-config|
-3. 规则                                       |pangu-rules|
+1. 安装                                       |pangu-install|
+2. 命令                                       |pangu-command|
+3. 配置                                       |pangu-config|
+4. 规则                                       |pangu-rules|
+5. 技巧                                       |pangu-tricks|
+
 
 ==============================================================================
-USAGE                                                         *pangu-usage*
+INSTALL                                                     *pangu-install*
 
-关闭 Pangu 插件。 >
+via vim-plug: >
+  Plug "hotoo/pangu.vim"
+<
+
+via Vundle: >
+  Plugin "hotoo/pangu.vim"
+<
+
+==============================================================================
+COMMANDS                                                    *pangu-command*
+
+                                                            *:[range]Pangu*
+手动执行命令，对指定范围的中文进行规范化。 >
+  :Pangu
+<
+
+                                                                *:PanguAll*
+手动执行命令，对当前 Buffer 的所有中文进行规范化。 >
+  :PanguAll
+<
+
                                                             *:PanguDisable*
->
+关闭 Pangu 插件。 >
   :PanguDisable
 <
+
+持久化禁用：
+
+在文档中任何位置注明 `PANGU_DISABLE`，则整个文档不自动规范化。
+
+
                                                              *:PanguEnable*
 打开 Pangu 插件。 >
-  :PanguDisable
+  :PanguEnable
 <
 
 ==============================================================================
@@ -31,7 +60,7 @@ CONFIGURATION                                                *pangu-config*
 <
 
 ==============================================================================
-CONFIGURATION                                                *pangu-config*
+RULES                                                *pangu-rules*
 
                                        *g:pangu_rule_fullwidth_punctuation*
 
@@ -80,5 +109,14 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
 <
 
 ==============================================================================
-PANGU_DISABLE
+TRICKS                                                    *pangu-tricks*
+
+批量规范化多个文档。 >
+  $ vim a.md b.md c.md
+
+  :argdo PanguAll | update
+  :wq
+<
+
+==============================================================================
 vim:tw=78:fo=tcroq2mM:et:sts=2:sw=2:ft=help:norl:
