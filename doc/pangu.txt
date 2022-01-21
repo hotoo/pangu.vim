@@ -98,7 +98,10 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
 “年月日”之间的数字，默认通过 `g:pangu_rule_spacing` 规则会被空格隔开。
 如果你希望“年月日”之间的数字不以空白隔开，可以使用这个新增的这个设置： >
   let g:pangu_rule_date = 0 " 年月日两头不留白
+  " eg: 今天是2022年1月21日星期五。
+
   let g:pangu_rule_date = 1 " 年月日两头留白
+  " eg: 今天是 2022年1月21日 星期五。
 <
 默认值 `2`，为了和之前默认行为兼容。
 
