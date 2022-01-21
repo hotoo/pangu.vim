@@ -63,19 +63,24 @@ function! PanGuSpacingCore(mode) range
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g'
-    " 处理一对括号，但不支持有嵌套的括号。
+    " 处理一对圆括号。注意：由于 VimScript 正则表达式不支持递归，所以这里不支持有嵌套的括号。
+    " 注意：即使支持正则表达式递归，或者手工模拟有限递归，也需要注意括号嵌套错乱的问题，即：
+    " - `<中<en>>`
+    " + `《中<en>》` 正确
+    " + `《中<en》>` 错误。
+    " Note: 为了视觉上便于区分，上面用书名号示例。
     silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF][^()]*\|[^()]*[\u4e00-\u9fa5\u3040-\u30FF]\))/（\1）/g'
     silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g'
-    " 处理一对括号，但不支持有嵌套的括号。
+    " 处理一对方括号。注意：不支持有嵌套的方括号。
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF][^[\]]*\|[^[\]]*[\u4e00-\u9fa5\u3040-\u30FF]\)\]/『\1』/g'
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/『\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\]/\1』/g'
-    " 处理一对括号，但不支持有嵌套的括号。
+    " 处理一对书名号，注意：不支持有嵌套的书名号。
     silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF][^<>]*\|[^<>]*[\u4e00-\u9fa5\u3040-\u30FF]\)>/《\1》/g'
     silent! execute firstline . ',' . lastline . 's/<\([\u4e00-\u9fa5\u3040-\u30FF]\)/《\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)>/\1》/g'
-    " 双半角书名号 `<<名称>>` 特殊处理
+    " 双半角书名号 `<<名称>>` 特殊修复处理
     silent! execute firstline . ',' . lastline . 's/<《/《/g'
     silent! execute firstline . ',' . lastline . 's/》>/》/g'
 
