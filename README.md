@@ -78,7 +78,7 @@ Plug "hotoo/pangu.vim"
 
 via Vundle:
 
-```
+```viml
 Plugin "hotoo/pangu.vim"
 ```
 
