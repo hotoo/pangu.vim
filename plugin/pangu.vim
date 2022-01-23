@@ -32,6 +32,9 @@ endif
 if !exists("g:pangu_punctuation_brackets")
   let g:pangu_punctuation_brackets = ["【", "】"]
 endif
+if !exists("g:pangu_punctuation_ellipsis")
+  let g:pangu_punctuation_ellipsis = "······"
+endif
 
 function! PanGuSpacingCore(mode) range
   let ignore = search("PANGU_DISABLE", 'nw')
@@ -118,12 +121,12 @@ function! PanGuSpacingCore(mode) range
     " - `......`
     " - `······`
     " @see [中文省略号应该垂直居中还是沉底？](https://www.zhihu.com/question/19593470)
-    silent! execute firstline . ',' . lastline . 's/。\{3,}/....../g'
+    silent! execute firstline . ',' . lastline . 's/。\{3,}/' . g:pangu_punctuation_ellipsis . '/g'
 
     " #11: 根据《标点符号用法》，重复的感叹号、问号不允许超过 3 个。
     " [标点符号用法 GB/T 15834 2011](http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf)
     silent! execute firstline . ',' . lastline . 's/\([！？]\)\1\{3,}/\1\1\1/g'
-    silent! execute firstline . ',' . lastline . 's/\([。，；：、“”【】〔〕『』〖〗《》]\)\1\{1,}/\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([。，；：、“”【】〔〕『』〖〗〚〛《》]\)\1\{1,}/\1/g'
   endif
 
   " 全角数字、英文字符、英文标点。
