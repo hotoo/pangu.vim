@@ -30,7 +30,7 @@ if !exists("g:pangu_rule_date")
 endif
 
 if !exists("g:pangu_punctuation_brackets")
-  let g:pangu_punctuation_brackets = ["『", "』"]
+  let g:pangu_punctuation_brackets = ["【", "】"]
 endif
 
 function! PanGuSpacingCore(mode) range

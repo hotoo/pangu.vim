@@ -9,7 +9,8 @@
 2. 命令                                       |pangu-command|
 3. 配置                                       |pangu-config|
 4. 规则                                       |pangu-rules|
-5. 技巧                                       |pangu-tricks|
+5. 标点                                       |pangu-punctuation|
+6. 技巧                                       |pangu-tricks|
 
 
 ==============================================================================
@@ -110,6 +111,20 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
 删除前置空白和尾空白。默认开启，如需关闭可以设置： >
   let g:pangu_rule_trailing_whitespace = 0
 <
+
+==============================================================================
+PUNCTUATION                                          *pangu-punctuation*
+
+                                         *g:pangu_punctuation_brackets*
+
+默认的方括号标点是 `["【", "】"]`，可以设置为你的偏好： >
+  let g:pangu_punctuation_brackets = ["『", "』"]
+  let g:pangu_punctuation_brackets = ["「", "」"]
+  let g:pangu_punctuation_brackets = ["〔", "〕"]
+  let g:pangu_punctuation_brackets = ["［", "］"]
+  let g:pangu_punctuation_brackets = ["〚", "〛"]
+<
+
 
 ==============================================================================
 TRICKS                                                    *pangu-tricks*
