@@ -123,7 +123,7 @@ function! PanGuSpacingCore(mode) range
     " #11: 根据《标点符号用法》，重复的感叹号、问号不允许超过 3 个。
     " [标点符号用法 GB/T 15834 2011](http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf)
     silent! execute firstline . ',' . lastline . 's/\([！？]\)\1\{3,}/\1\1\1/g'
-    silent! execute firstline . ',' . lastline . 's/\([。，；：、“”【 】〔 〕『』〖〗《》]\)\1\{1,}/\1/g'
+    silent! execute firstline . ',' . lastline . 's/\([。，；：、“”【】〔〕『』〖〗《》]\)\1\{1,}/\1/g'
   endif
 
   " 全角数字、英文字符、英文标点。
