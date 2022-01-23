@@ -34,7 +34,7 @@ if !exists("g:pangu_punctuation_brackets")
 endif
 
 function! PanGuSpacingCore(mode) range
-  let ignore = search("PANGU_DISABLE", 'n')
+  let ignore = search("PANGU_DISABLE", 'nw')
   if (ignore > 0)
     return
   endif
