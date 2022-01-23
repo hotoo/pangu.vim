@@ -78,9 +78,10 @@ function! PanGuSpacingCore(mode) range
     silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF][^()]*\|[^()]*[\u4e00-\u9fa5\u3040-\u30FF]\))/（\1）/g'
     silent! execute firstline . ',' . lastline . 's/(\([\u4e00-\u9fa5\u3040-\u30FF]\)/（\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\))/\1）/g'
-    " 处理一对方括号。注意：不支持有嵌套的方括号。
+
     let bracket_left = g:pangu_punctuation_brackets[0]
     let bracket_right = g:pangu_punctuation_brackets[1]
+    " 处理一对方括号。注意：不支持有嵌套的方括号。
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF][^[\]]*\|[^[\]]*[\u4e00-\u9fa5\u3040-\u30FF]\)\]/' . bracket_left . '\1' . bracket_right . '/g'
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/' . bracket_left . '\1/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\]/\1' . bracket_right . '/g'
