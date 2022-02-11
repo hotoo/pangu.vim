@@ -22,6 +22,9 @@ endif
 if !exists("g:pangu_rule_spacing")
   let g:pangu_rule_spacing=1
 endif
+if !exists("g:pangu_rule_spacing_punctuation")
+  let g:pangu_rule_spacing_punctuation=1
+endif
 if !exists("g:pangu_rule_trailing_whitespace")
   let g:pangu_rule_trailing_whitespace=1
 endif
@@ -137,8 +140,12 @@ function! PanGuSpacingCore(mode) range
 
   " 汉字与其前后的英文字符、英文标点、数字间增加空白。
   if g:pangu_rule_spacing == 1
-    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9@&=\[\$\%\^\-\+(\\]\)/\1 \2/g'
-    silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9!&;=\]\,\.\:\?\$\%\^\-\+\)\\]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([a-zA-Z0-9]\)/\1 \2/g'
+    silent! execute firstline . ',' . lastline . 's/\([a-zA-Z0-9]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
+  endif
+  if g:pangu_rule_spacing_punctuation == 1
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\([@&=\[\$\%\^\-\+(\\]\)/\1 \2/g'
+    silent! execute firstline . ',' . lastline . 's/\([!&;=\]\,\.\:\?\$\%\^\-\+\)]\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \2/g'
   endif
 
   " 默认日期每个数字都留白，向前兼容。
