@@ -23,7 +23,7 @@ if !exists("g:pangu_rule_spacing")
   let g:pangu_rule_spacing=1
 endif
 if !exists("g:pangu_rule_spacing_punctuation")
-  let g:pangu_rule_spacing_punctuation=1
+  let g:pangu_rule_spacing_punctuation=0
 endif
 if !exists("g:pangu_rule_trailing_whitespace")
   let g:pangu_rule_trailing_whitespace=1
