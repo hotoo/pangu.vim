@@ -94,6 +94,13 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
   let g:pangu_rule_spacing = 0
 <
 
+                                         *g:pangu_rule_spacing_punctuation*
+
+汉字和英文标点间增加一个空白，提升美感、可读性。
+并不推荐，所以这里是不兼容修改。默认关闭，需要开启可以设置： >
+  let g:pangu_rule_spacing_punctuation = 1
+<
+
                                                      *g:pangu_rule_date*
 
 “年月日”之间的数字，默认通过 `g:pangu_rule_spacing` 规则会被空格隔开。
