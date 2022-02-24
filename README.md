@@ -61,7 +61,7 @@
 同时可以在 vimrc 中开启保存文件时自动规范化功能。开启方式：
 
 ```viml
-autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing()
+autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing('ALL')
 ```
 
 > **注意：目前只对纯文本格式的文件支持较好。其他源代码场景，请谨慎开启。**
@@ -73,7 +73,8 @@ autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing(
 via vim-plug:
 
 ```viml
-Plug "hotoo/pangu.vim"
+Plug 'hotoo/pangu.vim', { 'for': ['markdown', 'vimwiki', 'text'] }
+let g:pangu_rule_date = 1
 ```
 
 via Vundle:
