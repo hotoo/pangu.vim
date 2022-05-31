@@ -87,6 +87,9 @@ function! PanGuSpacingCore(mode) range
 
     let bracket_left = g:pangu_punctuation_brackets[0]
     let bracket_right = g:pangu_punctuation_brackets[1]
+    " 预处理，将中括号(【,】)更换为特定类型的中括号(『』)，避免处理过程中无法正常处理。
+    silent! execute firstline . ',' . lastline . 's/' . bracket_left . '/〖/g'
+    silent! execute firstline . ',' . lastline . 's/' . bracket_right . '/〗/g'
     " 处理一对方括号。注意：不支持有嵌套的方括号。
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF][^[\]]*\|[^[\]]*[\u4e00-\u9fa5\u3040-\u30FF]\)\]/' . bracket_left . '\1' . bracket_right . '/g'
     silent! execute firstline . ',' . lastline . 's/\[\([\u4e00-\u9fa5\u3040-\u30FF]\)/' . bracket_left . '\1/g'
