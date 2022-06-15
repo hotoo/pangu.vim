@@ -74,6 +74,15 @@ RULES                                                *pangu-rules*
   let g:pangu_rule_fullwidth_punctuation = 0
 <
 
+                                       *g:pangu_rule_fullwidth_punctuation_link*
+
+自动修复 markdown 链接中的中文括号。
+
+如需关闭可以设置： >
+  let g:pangu_rule_fullwidth_punctuation_link = 0
+<
+
+
                                        *g:pangu_rule_duplicate_punctuation*
 
 连续重复的标点符号规则。根据中华人民共和国国家标准：标点符号用法 GB/T 15834-2011

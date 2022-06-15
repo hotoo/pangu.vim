@@ -26,6 +26,8 @@
 
 wiki 链接 [http://www.example.com/ 示例]
 
+【链接】（www.example.com)
+[【内容】内容](https://www.example.com/)
 
 
 无嵌套书名号：

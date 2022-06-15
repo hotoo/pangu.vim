@@ -13,6 +13,9 @@ endif
 if !exists("g:pangu_rule_fullwidth_punctuation")
   let g:pangu_rule_fullwidth_punctuation=1
 endif
+if !exists("g:pangu_rule_fullwidth_punctuation_link")
+  let g:pangu_rule_fullwidth_punctuation_link=1
+endif
 if !exists("g:pangu_rule_duplicate_punctuation")
   let g:pangu_rule_duplicate_punctuation=1
 endif
@@ -101,8 +104,13 @@ function! PanGuSpacingCore(mode) range
     " 双半角书名号 `<<名称>>` 特殊修复处理
     silent! execute firstline . ',' . lastline . 's/<《/《/g'
     silent! execute firstline . ',' . lastline . 's/》>/》/g'
+  endif
 
-    " 修复 markdown 链接所使用的标点。
+  " 修复 markdown 链接所使用的标点。
+  if g:pangu_rule_fullwidth_punctuation_link == 1
+    let bracket_left = g:pangu_punctuation_brackets[0]
+    let bracket_right = g:pangu_punctuation_brackets[1]
+
     " 参考链接
     silent! execute firstline . ',' . lastline . 's/[' . bracket_left . '[]\([^' . bracket_right . '\]]\+\)[' . bracket_right . '\]][' . bracket_left . '[]\([^' . bracket_right . '\]]\+\)[' . bracket_right . '\]]/[\1][\2]/g'
     " 内联链接
