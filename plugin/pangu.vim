@@ -31,6 +31,9 @@ endif
 if !exists("g:pangu_rule_date")
   let g:pangu_rule_date = 2
 endif
+if !exists("g:pangu_rule_remove_zero_width_whitespace")
+  let g:pangu_rule_remove_zero_width_whitespace = 1
+endif
 
 if !exists("g:pangu_punctuation_brackets")
   let g:pangu_punctuation_brackets = ["【", "】"]
@@ -180,6 +183,10 @@ function! PanGuSpacingCore(mode) range
   if g:pangu_rule_trailing_whitespace == 1
     silent! execute firstline . ',' . lastline . 's/^ \[/[/'
     silent! execute firstline . ',' . lastline . 's/\s\+$//'
+  endif
+
+  if g:pangu_rule_remove_zero_width_whitespace == 1
+    silent! execute firstline . ',' . lastline . 's/[\u200c\u200b\u200d\u202c\u2061\u2062\u2063\u2064\ufeff]//g'
   endif
 
   let &regexpengine=l:save_regexpengine
