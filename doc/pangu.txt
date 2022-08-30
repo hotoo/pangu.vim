@@ -118,6 +118,11 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
 删除前置空白和尾空白。默认开启，如需关闭可以设置： >
   let g:pangu_rule_trailing_whitespace = 0
 <
+                                 *g:pangu_rule_remove_zero_width_whitespace*
+
+删除不可见的零宽空白字符。默认开启，如需关闭，可以设置： >
+  let g:pangu_rule_remove_zero_width_whitespace = 0
+<
 
 ==============================================================================
 PUNCTUATION                                          *pangu-punctuation*
