@@ -77,7 +77,7 @@ function! PanGuSpacingCore(mode) range
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)!\s*\([^\[]\)/\1！\2/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\):\s*/\1：/g'
     silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)?\s*/\1？/g'
-    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*/\1、/g'
+    silent! execute firstline . ',' . lastline . 's/\([\u4e00-\u9fa5\u3040-\u30FF]\)\\\s*\([^\\]\)/\1、\2/g'
     " 处理一对圆括号。注意：由于 VimScript 正则表达式不支持递归，所以这里不支持有嵌套的括号。
     " 注意：即使支持正则表达式递归，或者手工模拟有限递归，也需要注意括号嵌套错乱的问题，即：
     " - `<中<en>>`
