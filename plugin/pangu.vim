@@ -186,7 +186,7 @@ function! PanGuSpacingCore(mode) range
   endif
 
   if g:pangu_rule_remove_zero_width_whitespace == 1
-    silent! execute firstline . ',' . lastline . 's/[\u200c\u200b\u200d\u202c\u2061\u2062\u2063\u2064\ufeff]//g'
+    silent! execute firstline . ',' . lastline . 's/[\u200c\u200b\u200d\u202c\u2060\u2061\u2062\u2063\u2064\ufeff]//g'
   endif
 
   let &regexpengine=l:save_regexpengine
