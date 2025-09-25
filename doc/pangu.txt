@@ -124,6 +124,18 @@ http://www.moe.gov.cn/ewebeditor/uploadfile/2015/01/13/20150113091548267.pdf
   let g:pangu_rule_remove_zero_width_whitespace = 0
 <
 
+                                       *g:pangu_rule_spacing_enhancement*
+
+增强的空格处理规则，处理以下情况：
+1. 删除中文标点符号之后的空格（1个或多个）
+2. 将行内连续多个空格替换为单个空格（不处理行首空格，保留缩进）
+3. 保留行首空格（缩进）
+4. 行尾空格通过 `g:pangu_rule_trailing_whitespace` 处理
+
+默认关闭（为保持兼容性），需要开启可以设置： >
+  let g:pangu_rule_spacing_enhancement = 1
+<
+
 ==============================================================================
 PUNCTUATION                                          *pangu-punctuation*
 
