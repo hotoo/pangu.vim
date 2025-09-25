@@ -190,12 +190,11 @@ function! PanGuSpacingCore(mode) range
   " 增强的空格处理规则
   if g:pangu_rule_spacing_enhancement == 1
     " 1. 删除中文标点符号之后的空格（1个或多个）
-    " 只处理中文标点符号后的空格，不影响其他字符
-    silent! execute firstline . ',' . lastline . 's/\([，。！？；：、""''【】〔〕『』〖〗〚〛《》（）]\)\s\+\([^[:space:]]\)/\1\2/g'
+    silent! execute firstline . ',' . lastline . 's/\([，。！？；：、""''【】〔〕『』〖〗〚〛《》（）]\)\s\+/\1/g'
     
-    " 2. 将行内连续多个空格替换为单个空格（不处理行首的空格，保留缩进）
-    " 只在非行首且前面有非空白字符的情况下处理连续空格
-    silent! execute firstline . ',' . lastline . 's/\([^[:space:]]\)\s\{2,}\([^[:space:]]\)/\1 \2/g'
+    " 2. 处理明显的多余空格：4个或更多连续空格替换为单个空格
+    " 这样不会影响正常的双空格（如英文句号后）或中英文间的单空格
+    silent! execute firstline . ',' . lastline . 's/\([^[:space:]]\)\s\{4,}/\1 /g'
   endif
 
   if g:pangu_rule_trailing_whitespace == 1
