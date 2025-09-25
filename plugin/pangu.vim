@@ -34,6 +34,9 @@ endif
 if !exists("g:pangu_rule_remove_zero_width_whitespace")
   let g:pangu_rule_remove_zero_width_whitespace = 1
 endif
+if !exists("g:pangu_rule_spacing_enhancement")
+  let g:pangu_rule_spacing_enhancement = 0
+endif
 
 if !exists("g:pangu_punctuation_brackets")
   let g:pangu_punctuation_brackets = ["【", "】"]
@@ -182,6 +185,16 @@ function! PanGuSpacingCore(mode) range
     silent! execute firstline . ',' . lastline . 's/\(\d\{4,5}\)\s*年\s*\(\d\{1,2}\)\s*月\s*\(\d\{1,2}\)\s\+日/\1年\2月\3日/g'
     " 两端留白
     silent! execute firstline . ',' . lastline . 's/\(\(\d\{4,5}年\)\?\d\{1,2}月\(\d\{1,2}日\)\?\)\([\u4e00-\u9fa5\u3040-\u30FF]\)/\1 \4/g'
+  endif
+
+  " 增强的空格处理规则
+  if g:pangu_rule_spacing_enhancement == 1
+    " 1. 删除中文标点符号之后的空格（1个或多个）
+    silent! execute firstline . ',' . lastline . 's/\([，。！？；：、""''【】〔〕『』〖〗〚〛《》（）]\)\s\+/\1/g'
+    
+    " 2. 处理明显的多余空格：4个或更多连续空格替换为单个空格
+    " 这样不会影响正常的双空格（如英文句号后）或中英文间的单空格
+    silent! execute firstline . ',' . lastline . 's/\([^[:space:]]\)\s\{4,}/\1 /g'
   endif
 
   if g:pangu_rule_trailing_whitespace == 1
